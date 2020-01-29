@@ -6,7 +6,12 @@ const {
   getAllPlaylists,
   createPlaylist,
   getPlaylistById,
-  modifyPlaylist
+  modifyPlaylist,
+  deletePlaylist,
+  addTrackToPlaylist,
+  getPlaylistTrackEntryById,
+  listTracksInPlaylist,
+  deleteTrackFromPlaylist
 } = require("../sql/queries");
 
 // ===================================================================================
@@ -115,4 +120,63 @@ router.delete("/:id", (req, res) => {
   });
 });
 
+// ===================================================================================
+// asign a song to playlist
+// ===================================================================================
+router.post("/addtrack", (req, res) => {
+  connection.query(addTrackToPlaylist(), req.body, (error, outerResult) => {
+    if (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ flash: "There was an error with the database query." });
+    }
+    connection.query(
+      getPlaylistTrackEntryById(outerResult.insertId),
+      (error, innerResult) => {
+        if (error) {
+          console.log(error);
+          return res
+            .status(500)
+            .json({ flash: "There was an error with the database query." });
+        }
+        res
+          .status(200)
+          .json({ payload: innerResult, flash: "Song added to playlist" });
+      }
+    );
+  });
+});
+
+// ===================================================================================
+// list all the songs in a playlist
+// ===================================================================================
+router.get("/listtracks/:id", (req, res) => {
+  const id = req.params.id;
+  connection.query(listTracksInPlaylist(id), (error, result) => {
+    if (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ flash: "There was an error with the database query." });
+    }
+    res.status(200).json({ payload: result });
+  });
+});
+
+// ===================================================================================
+// delete a songs from playlist
+// ===================================================================================
+router.delete("/deletetrack/:id", (req, res) => {
+  const id = req.params.id;
+  connection.query(deleteTrackFromPlaylist(id), (error, result) => {
+    if (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ flash: "There was an error with the database query." });
+    }
+    res.status(200).json({ flash: "Song removed from playlist." });
+  });
+});
 module.exports = router;

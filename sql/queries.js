@@ -35,11 +35,13 @@ module.exports = {
   addTrackToPlaylist: function() {
     return "INSERT INTO playlist_track SET ?";
   },
+  getPlaylistTrackEntryById(id) {
+    return `SELECT * from playlist_track WHERE id = ${id}`;
+  },
   listTracksInPlaylist: function(id) {
-    return `SELECT track.title AS track_title, track.artist, track.album_art, track.youtube_url, playlist.title
+    return `SELECT playlist_track.id AS row_id, track.title AS track_title, track.artist, track.album_art, track.youtube_url
       FROM track 
       JOIN playlist_track on playlist_track.track_id = track.id
-      JOIN playlist on playlist.id = playlist_track.playlist_id
       WHERE playlist_track.playlist_id = ${id}`;
   },
   deleteTrackFromPlaylist: function(id) {

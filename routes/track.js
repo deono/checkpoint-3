@@ -2,7 +2,13 @@ const express = require("express");
 const router = express.Router();
 const connection = require("../config/db");
 
-const { getAllTracks } = require("../sql/queries");
+const {
+  getAllTracks,
+  getTrackById,
+  createTrack,
+  modifyTrack,
+  deleteTrack
+} = require("../sql/queries");
 
 // ===================================================================================
 // get all the songs
@@ -51,7 +57,7 @@ router.post("/", (req, res) => {
         .json({ flash: "There was an error with the database query." });
     }
     connection.query(
-      getPlaylistById(outerResult.insertId),
+      getTrackById(outerResult.insertId),
       (error, innerResult) => {
         if (error) {
           console.log(error);
