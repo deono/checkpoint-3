@@ -46,5 +46,20 @@ module.exports = {
   },
   deleteTrackFromPlaylist: function(id) {
     return `DELETE FROM playlist_track WHERE id = ${id}`;
+  },
+  addUser: function() {
+    return "INSERT INTO user SET ?";
+  },
+  getUserById: function(id) {
+    return `SELECT id, first_name, last_name, email FROM user WHERE id = ${id}`;
+  },
+  addPlaylistToFavorites: function() {
+    return "INSERT into user_playlist SET ?";
+  },
+  getFavoritesByRowId: function(id) {
+    return `SELECT * FROM user_playlist WHERE id = ${id}`;
+  },
+  removeFavoriteById: function(id) {
+    return `DELETE FROM user_playlist WHERE id = ${id}`;
   }
 };

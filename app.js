@@ -15,6 +15,7 @@ app.use(
 // routes
 app.use("/playlist", require("./routes/playlist"));
 app.use("/track", require("./routes/track"));
+app.use("/user", require("./routes/user"));
 
 const port = process.env.PORT || 5000;
 app.listen(port, err => {
